@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  webui:
+    build: .
+    ports:
+      - "7860:7860"
+    volumes:
+      - ./data:/app/data
+      - ./images:/app/images
+    depends_on:
+      - deepseek
+
+  deepseek:
+    image: oobabooga/text-generation-webui:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/models
+    environment:
+      - MODEL=deepseek-llm
+    command: >
+      python server.py --model /models/deepseek-llm --listen --port 8000
